@@ -1,0 +1,30 @@
+import urllib.request
+import threading
+import time
+import os
+
+def DownloadPicture(url):
+    print("url is :{}".format(os.path.basename(url)))
+    filename = os.path.basename(url)
+    print("filename is :{}".format(filename))
+    urllib.request.urlretrieve(url, 'C:/Users/yahalom/Pictures/{}'.format(filename))
+
+def Counter(filename):
+    size_of_file= 0
+    print("start counter... ")
+    global urlfilesize
+    print("urlfilesize  :{}".format(urlfilesize))
+    while size_of_file < urlfilesize:
+        time.sleep(1)
+        size_of_file  = os.path.getsize('C:/Users/yahalom/Pictures/{}'.format(filename))
+        print("download file :{}".format(size_of_file))
+
+
+
+url = 'http://www.study-io.com/java/installations/mongodb-win32-x86_64-2008plus-ssl-3.6.3-signed.msi'
+DownloadPicture(url)
+t1 = threading.Thread(target=Counter)
+t1.daemon = True
+d =  urllib.request.urlopen(url) ;
+urlfilesize = d.info().get('content-length')
+t1.start()
